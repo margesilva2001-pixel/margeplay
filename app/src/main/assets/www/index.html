@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d0b12">
+<title>MARGEPLAY</title>
+<link rel="icon" href="icon.png">
+<style>
+:root{--bg:#0d0b12;--card:#1a1622;--line:#2b2536;--ink:#f4f1f8;--dim:#a39cb0;--acc:#ffcc00;--acc2:#e8380d}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:clip}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;background:linear-gradient(var(--bg) 70%,transparent)}
+header img{width:38px;height:38px;border-radius:10px;object-fit:cover;border:2px solid var(--acc)}
+header h1{margin:0;font-size:22px;font-weight:900;letter-spacing:.5px}
+header h1 b{color:var(--acc)}
+main{padding:0 0 calc(90px + env(safe-area-inset-bottom))}
+.view{display:none}.view.on{display:block}
+h2{font-size:19px;margin:22px 16px 10px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+h2 button{background:none;border:0;color:var(--acc);font-size:14px;padding:6px 0;min-height:36px}
+.row{display:flex;gap:12px;overflow-x:auto;padding:0 16px 6px;scroll-padding-inline:16px;scroll-snap-type:x proximity;scrollbar-width:none}
+.row::-webkit-scrollbar{display:none}
+.tile{flex:none;width:132px;scroll-snap-align:start;background:none;border:0;padding:0;text-align:left}
+.tile .th{position:relative;aspect-ratio:2/3;border-radius:12px;overflow:hidden;background:var(--card)}
+.tile img{width:100%;height:100%;object-fit:cover;display:block}
+.tile .t{font-size:13px;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tile .o{font-size:11px;color:var(--dim);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .y{font-size:12px;color:var(--dim)}
+.bdg{position:absolute;top:6px;left:6px;background:#000c;color:var(--acc);font-size:11px;font-weight:800;padding:2px 7px;border-radius:6px}
+.bar{position:absolute;left:0;bottom:0;height:4px;background:var(--acc)}
+.wide .tile{width:220px}.wide .th{aspect-ratio:16/9}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:14px;padding:0 16px}
+.grid .tile{width:auto}
+.skel{flex:none;width:132px;aspect-ratio:2/3;border-radius:12px;background:linear-gradient(90deg,var(--card),#241e2e,var(--card));background-size:200% 100%;animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.msg{padding:14px 16px;color:var(--dim)}
+.msg button,.btn{background:var(--acc);color:#111;border:0;border-radius:999px;padding:10px 18px;font-weight:700;min-height:44px}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.search{display:flex;gap:8px;padding:6px 16px 0}
+.search input{flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:16px;min-height:48px}
+.search input:focus,button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px 0}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;min-height:40px}
+.chip.on{background:var(--acc);color:#111;border-color:var(--acc)}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);background:#120f18f2;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(10px)}
+nav button{background:none;border:0;padding:8px 0 10px;color:var(--dim);font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:58px}
+nav button.on{color:var(--acc)}
+nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.langs{display:flex;gap:8px;overflow-x:auto;padding:4px 16px 4px;scrollbar-width:none}.langs .chip{flex:none}
+.hero{position:relative;margin:4px 16px 0;border-radius:18px;overflow:hidden;aspect-ratio:16/9;max-height:320px;width:calc(100% - 32px);background:var(--card)}
+.hero img{width:100%;height:100%;object-fit:cover;filter:brightness(.6)}
+.hero div{position:absolute;inset:auto 0 0 0;padding:16px;background:linear-gradient(transparent,#000c)}
+.hero h3{margin:0 0 8px;font-size:22px;line-height:1.15}
+.sheet{position:fixed;inset:0;z-index:40;background:#000a;display:none;align-items:flex-end;justify-content:center}
+.sheet.on{display:flex}
+.sheet .box{background:var(--bg);width:100%;max-width:720px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;border-top:1px solid var(--line);padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+.sheet .cover{position:relative;aspect-ratio:16/9;background:var(--card)}
+.sheet .cover img{width:100%;height:100%;object-fit:cover;filter:brightness(.75)}
+.x{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:0;background:#000a;color:#fff;font-size:22px}
+.sheet .in{padding:16px}
+.sheet h3{margin:0;font-size:22px;line-height:1.2}
+.meta{color:var(--dim);font-size:14px;margin:4px 0 12px}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.desc{color:#d6d0de;font-size:15px;white-space:pre-line;max-height:9.5em;overflow:hidden;position:relative}
+.desc.open{max-height:none}
+.more{background:none;border:0;color:var(--acc);padding:6px 0;min-height:36px}
+.eps{list-style:none;margin:10px 0 0;padding:0}
+.eps button{width:100%;display:flex;gap:10px;align-items:center;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px;min-height:52px}
+.eps .n{color:var(--acc);font-weight:800;width:2.2em;flex:none}
+.eps .p{margin-left:auto;font-size:12px;color:var(--dim);flex:none}
+.lic{font-size:12px;color:var(--dim);margin-top:12px;overflow-wrap:anywhere}
+#player{position:fixed;inset:0;z-index:60;background:#000;display:none;flex-direction:column}
+#player.on{display:flex}
+#player .top{display:flex;align-items:center;gap:8px;padding:calc(6px + env(safe-area-inset-top)) 8px 6px}
+#player .top b{flex:1;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#player .top button{background:none;border:0;color:#fff;min-width:44px;min-height:44px;font-size:15px}
+#stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+#stage video,#stage iframe{width:100%;height:100%;max-height:100%;border:0;background:#000}
+.live{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 16px}
+.ch{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:left;min-height:96px}
+.ch .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--acc2);margin-right:6px}
+.ch small{display:block;color:var(--dim);margin-top:4px}
+.ch .del{position:absolute;top:4px;right:4px;background:none;border:0;color:var(--dim);width:40px;height:40px;font-size:18px}
+form.add{display:grid;gap:10px;padding:0 16px}
+form.add input{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:16px;min-height:48px}
+.note{font-size:13px;color:var(--dim);padding:8px 16px}
+.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--acc);color:#111;font-weight:700;padding:10px 16px;border-radius:999px;z-index:80;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+@media(min-width:900px){.tile{width:160px}.wide .tile{width:280px}}
+@media(prefers-reduced-motion:reduce){.skel{animation:none}}
+</style>
+</head>
+<body>
+<header><img src="icon.png" alt=""><h1>MARGE<b>PLAY</b></h1></header>
+<main>
+  <section class="view on" id="v-home"></section>
+  <section class="view" id="v-search">
+    <form class="search" id="sform"><input id="q" type="search" placeholder="Buscar filmes, desenhos, séries…" autocomplete="off" enterkeyhint="search"><button class="btn">Buscar</button></form>
+    <div class="chips" id="cats"></div>
+    <div id="sres"></div>
+  </section>
+  <section class="view" id="v-live"></section>
+  <section class="view" id="v-list"></section>
+  <section class="view" id="v-all"></section>
+</main>
+
+<nav id="nav">
+  <button data-v="home" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</button>
+  <button data-v="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg>Buscar</button>
+  <button data-v="live"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M8 2l4 4 4-4"/></svg>Ao vivo</button>
+  <button data-v="list"><svg viewBox="0 0 24 24"><path d="M12 21l-8-8a5 5 0 0 1 8-6 5 5 0 0 1 8 6z"/></svg>Minha lista</button>
+</nav>
+
+<div class="sheet" id="sheet"><div class="box" id="sbox"></div></div>
+
+<div id="player">
+  <div class="top"><button id="pback" aria-label="Voltar">←</button><b id="ptitle"></b><button id="pnext" hidden>Próximo ›</button></div>
+  <div id="stage"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+{
+const IA='https://archive.org';
+const CATS=[
+ {id:'filmes',name:'Filmes clássicos',q:'collection:feature_films'},
+ {id:'desenhos',name:'Desenhos e animações',q:'collection:(classic_cartoons OR animationandcartoons)'},
+ {id:'anime',name:'Anime clássico',q:'collection:(animationandcartoons OR classic_cartoons) AND (subject:anime OR subject:japanese OR title:anime)'},
+ {id:'series',name:'Séries de TV clássicas',q:'collection:classic_tv'},
+ {id:'terror',name:'Terror e ficção científica',q:'collection:SciFi_Horror'},
+ {id:'noir',name:'Policial noir',q:'collection:film_noir'},
+ {id:'mudo',name:'Cinema mudo',q:'collection:silent_films'},
+ {id:'abertos',name:'Filmes abertos (Blender)',q:'(creator:"Blender Foundation" OR subject:"blender open movie" OR subject:"open movie")'}
+];
+const ALLCOL='collection:(feature_films OR classic_cartoons OR animationandcartoons OR classic_tv OR SciFi_Horror OR film_noir OR silent_films)';
+const PRESET_CH=[
+ {id:'cultura',name:'TV Cultura',sub:'Canal oficial · PT-BR',ch:'UCjOJvvYe6tyEHY21OD33h8A',preset:1},
+ {id:'lofi',name:'Lofi Girl',sub:'Música 24 h · sem diálogo',ch:'UCSJ4gkVC6NrvII8umztf0Ow',preset:1}
+];
+/* ---------- idioma: só entra o que é PT ou tem legenda PT-BR ---------- */
+const LANGS=[
+ {id:'',name:'Todos'},
+ {id:'pt',name:'Português (dublado/original)',re:/^(pt|por|pt-br|portuguese|portugu[eê]s|brazilian)/i,q:'language:(portuguese OR por OR pt OR "pt-br" OR "português" OR brazilian)'},
+ {id:'en',name:'Inglês · leg. PT-BR',re:/^(en|eng|english|ingl[eê]s)/i,q:'language:(english OR eng OR en)'},
+ {id:'es',name:'Espanhol · leg. PT-BR',re:/^(es|spa|spanish|espa[nñ]ol)/i,q:'language:(spanish OR spa OR es)'},
+ {id:'ja',name:'Japonês · leg. PT-BR',re:/^(ja|jpn|japanese)/i,q:'language:(japanese OR jpn OR ja)'},
+ {id:'fr',name:'Francês · leg. PT-BR',re:/^(fr|fre|fra|french)/i,q:'language:(french OR fre OR fra OR fr)'},
+ {id:'it',name:'Italiano · leg. PT-BR',re:/^(it|ita|italian)/i,q:'language:(italian OR ita OR it)'},
+ {id:'de',name:'Alemão · leg. PT-BR',re:/^(de|ger|deu|german)/i,q:'language:(german OR ger OR deu OR de)'},
+ {id:'xx',name:'Outros idiomas · leg. PT-BR'}
+];
+const SUBQ='format:(SubRip OR "Web Video Text Tracks" OR "Closed Caption Text")';
+const PTSUB=/(^|[._\-\s(\[])(pt|por|ptbr|pt[-_]br|portugu[eê]s|portuguese|brazil|brasil)([._\-\s)\]]|$)/i;
+
+
+/* ---------- armazenamento ---------- */
+const store={get(k,d){try{const v=localStorage.getItem('mp_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('mp_'+k,JSON.stringify(v))}catch(e){}}};
+let favs=store.get('favs',[]);       // [{id,title,year}]
+let prog=store.get('prog',{});       // {id:{file,ep,t,d,title,year,at}}
+let chans=store.get('chans',[]);     // canais adicionados
+let lang=store.get('lang','');
+let ver=store.get('ver',{});         // verificação de idioma por título
+let ttl=store.get('ttl',{});         // títulos oficiais (Wikidata): id -> {pt,orig}
+
+/* ---------- utilidades ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const thumb=id=>IA+'/services/img/'+encodeURIComponent(id);
+const txt=h=>{try{return new DOMParser().parseFromString(String(h).replace(/<br\s*\/?>/gi,'\n'),'text/html').body.textContent.trim()}catch(e){return ''}};
+const first=v=>Array.isArray(v)?v[0]:v;
+const fmtT=s=>{s=Math.floor(s||0);const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')};
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.k);toast.k=setTimeout(()=>t.classList.remove('on'),1800)}
+const cache=new Map();
+async function getJSON(url){
+  if(cache.has(url))return cache.get(url);
+  const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),15000);
+  try{const r=await fetch(url,{signal:ctl.signal});if(!r.ok)throw new Error(r.status);const j=await r.json();cache.set(url,j);return j}
+  finally{clearTimeout(tm)}
+}
+async function search(q,page=1,rows=30){
+  const p=new URLSearchParams({q:'('+q+') AND mediatype:movies',rows,page,output:'json'});
+  ['identifier','title','year','downloads'].forEach(f=>p.append('fl[]',f));
+  p.append('sort[]','downloads desc');
+  const j=await getJSON(IA+'/advancedsearch.php?'+p);
+  return {total:j.response.numFound,docs:j.response.docs};
+}
+
+function langOf(md){
+  const raw=[].concat(md.language||[]).join(' ').trim();
+  if(!raw)return '';
+  const l=LANGS.find(x=>x.re&&x.re.test(raw));return l?l.id:'xx';
+}
+function subsOf(files){return files.filter(f=>/\.(srt|vtt)$/i.test(f.name)&&PTSUB.test(f.name.replace(/\.(srt|vtt)$/i,'')))}
+function judge(md,files){
+  const l=langOf(md);const sub=subsOf(files).length>0;
+  return {l,sub,ok:l==='pt'||sub};
+}
+function langQ(){
+  const L=LANGS.find(x=>x.id===lang);
+  const pt=LANGS[1].q;
+  if(!L||!L.id)return `(${pt} OR ${SUBQ})`;
+  if(L.id==='pt')return pt;
+  if(L.id==='xx')return `(${SUBQ} AND NOT ${LANGS.slice(1,8).map(x=>x.q).join(' AND NOT ')})`;
+  return `(${L.q} AND ${SUBQ})`;
+}
+async function verify(id){
+  if(ver[id])return ver[id];
+  const j=await getJSON(IA+'/metadata/'+encodeURIComponent(id));
+  const v=judge(j.metadata||{},j.files||[]);
+  ver[id]=v;store.set('ver',ver);return v;
+}
+// filtra uma lista de resultados, verificando metadados em paralelo
+async function keepAllowed(docs){
+  const out=[];let i=0;
+  async function worker(){while(i<docs.length){const d=docs[i++];try{const v=await verify(d.identifier);if(v.ok&&(!lang||v.l===lang||(lang==='xx'&&v.l!=='pt')))out.push(d)}catch(e){}}}
+  await Promise.all(Array.from({length:6},worker));
+  const order=new Map(docs.map((d,k)=>[d.identifier,k]));
+  return out.sort((a,b)=>order.get(a.identifier)-order.get(b.identifier));
+}
+function badge(id){const v=ver[id];if(!v)return '';return `<span class="bdg">${v.l==='pt'?'DUB PT':'LEG PT'}</span>`}
+
+/* ---------- títulos oficiais em português (Wikidata) ---------- */
+const WD='https://query.wikidata.org/sparql';
+function cleanTitle(t0){
+  const raw=String(t0||'');let t=raw.replace(/[_]+/g,' ');
+  t=t.replace(/\.(mp4|avi|mkv|ogv|mpeg|mpg)$/i,'');
+  t=t.replace(/[\[(](?:19|20)\d\d[\])]/g,'');
+  t=t.replace(/[\[(][^\])]*(restored|remaster|hd|1080p|720p|480p|full movie|filme completo|public domain|dom[ií]nio p[uú]blico|colori[sz]ed|dvd|vhs|rip)[^\])]*[\])]/gi,'');
+  t=t.replace(/\s*[-–|:]\s*(full movie|filme completo|restored( version)?|remastered|hd|public domain)\s*$/gi,'');
+  t=t.replace(/\b(full movie|filme completo|restored|remastered|1080p|720p|480p|\bhd\b)\b/gi,'');
+  t=t.replace(/\s{2,}/g,' ').replace(/^[\s\-–|:]+|[\s\-–|:]+$/g,'').trim();
+  return t||raw;
+}
+function showTitle(id,raw){
+  const r=ttl[id];const orig=cleanTitle((r&&r.orig)||raw||id);
+  if(r&&r.pt)return {main:r.pt,orig:r.pt.toLowerCase()!==orig.toLowerCase()?orig:''};
+  return {main:orig,orig:''};
+}
+async function sparql(q){
+  const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),12000);
+  try{const r=await fetch(WD+'?format=json&query='+encodeURIComponent(q),{signal:ctl.signal,headers:{Accept:'application/sparql-results+json'}});if(!r.ok)throw 0;return (await r.json()).results.bindings}
+  finally{clearTimeout(tm)}
+}
+const ttlPending=new Set();
+async function fetchTitles(ids){
+  ids=[...new Set(ids)].filter(id=>!(id in ttl)&&!ttlPending.has(id)&&/^[\w.\-]+$/.test(id));
+  if(!ids.length)return false;
+  ids.forEach(i=>ttlPending.add(i));
+  try{
+    for(let k=0;k<ids.length;k+=40){
+      const part=ids.slice(k,k+40);
+      const rows=await sparql(`SELECT ?ia ?br ?pt ?orig WHERE { VALUES ?ia { ${part.map(i=>'"'+i+'"').join(' ')} } ?f wdt:P724 ?ia .
+        OPTIONAL { ?f rdfs:label ?br FILTER(LANG(?br)="pt-br") } OPTIONAL { ?f rdfs:label ?pt FILTER(LANG(?pt)="pt") }
+        OPTIONAL { ?f wdt:P1476 ?orig } }`);
+      part.forEach(i=>ttl[i]={});
+      for(const b of rows){const i=b.ia.value;const t=ttl[i];
+        if(!t.pt)t.pt=(b.br&&b.br.value)||(b.pt&&b.pt.value)||'';
+        if(!t.orig&&b.orig)t.orig=b.orig.value;}
+    }
+    store.set('ttl',ttl);return true;
+  }catch(e){return false}finally{ids.forEach(i=>ttlPending.delete(i))}
+}
+// troca os títulos das capas já desenhadas pelos oficiais
+async function enrich(root){
+  root=root||document;
+  const tiles=[...root.querySelectorAll('.tile[data-id]')];
+  if(!tiles.length)return;
+  await fetchTitles(tiles.map(t=>t.dataset.id));
+  for(const t of document.querySelectorAll('.tile[data-id]')){
+    const r=ttl[t.dataset.id];if(!r||!r.pt)continue;
+    const st=showTitle(t.dataset.id,t.dataset.raw);
+    t.querySelector('.t').textContent=st.main;
+    const o=t.querySelector('.o');if(o)o.textContent=st.orig;
+  }
+  const h=document.querySelector('#hero h3[data-id]');
+  if(h&&ttl[h.dataset.id]&&ttl[h.dataset.id].pt)h.textContent=ttl[h.dataset.id].pt;
+}
+// busca no Wikidata filmes pelo nome em português e devolve os códigos do Internet Archive
+async function iaIdsByPtTitle(words){
+  if(!words||words.length<3)return [];
+  try{
+    const w=words.replace(/["\\]/g,'').toLowerCase();
+    const rows=await sparql(`SELECT DISTINCT ?ia WHERE { ?f wdt:P724 ?ia . ?f rdfs:label ?l . FILTER(LANG(?l)="pt" || LANG(?l)="pt-br") FILTER(CONTAINS(LCASE(STR(?l)), "${w}")) } LIMIT 40`);
+    return rows.map(b=>b.ia.value).filter(i=>/^[\w.\-]+$/.test(i));
+  }catch(e){return []}
+}
+
+/* ---------- blocos de interface ---------- */
+function tileHTML(d,wide){
+  const pr=prog[d.identifier];
+  const pct=pr&&pr.d?Math.min(100,pr.t/pr.d*100):0;
+  const raw=first(d.title)||d.identifier;const st=showTitle(d.identifier,raw);
+  return `<button class="tile" data-id="${esc(d.identifier)}" data-raw="${esc(raw)}"><div class="th"><img loading="lazy" src="${thumb(d.identifier)}" alt="">${badge(d.identifier)}${pct?`<span class="bar" style="width:${pct}%"></span>`:''}</div><div class="t">${esc(st.main)}</div><div class="o">${esc(st.orig)}</div><div class="y">${esc(wide&&pr?(pr.ep?'Ep. '+pr.ep+' · ':'')+'parou em '+fmtT(pr.t):(d.year||''))}</div></button>`;
+}
+const skels=n=>Array.from({length:n},()=>'<div class="skel"></div>').join('');
+function errHTML(retry){return `<div class="msg">Não foi possível carregar. Verifique a internet. <button data-retry="${retry}">Tentar de novo</button></div>`}
+
+/* ---------- INÍCIO ---------- */
+function renderHome(){
+  const v=$('#v-home');
+  const cont=Object.entries(prog).filter(([,p])=>!p.done).sort((a,b)=>b[1].at-a[1].at).slice(0,15);
+  let h=`<div class="langs">${LANGS.map(l=>`<button class="chip ${l.id===lang?'on':''}" data-lang="${l.id}">${esc(l.name)}</button>`).join('')}</div><div id="hero" class="hero"></div>`;
+  if(cont.length)h+=`<h2>Continuar assistindo</h2><div class="row wide">${cont.map(([id,p])=>tileHTML({identifier:id,title:p.title,year:p.year},1)).join('')}</div>`;
+  h+=CATS.map(c=>`<h2>${esc(c.name)}<button data-all="${c.id}">Ver tudo</button></h2><div class="row" id="row-${c.id}">${skels(6)}</div>`).join('');
+  h+=`<p class="note">Só aparecem títulos com áudio em português ou com legenda em PT-BR. Os marcados DUB PT têm áudio em português; os marcados LEG PT têm legenda em português. Conteúdo em domínio público ou com licença aberta, fornecido pelo Internet Archive (archive.org).</p>`;
+  v.innerHTML=h;
+  CATS.forEach(loadRow);enrich(v);
+}
+async function loadRow(c){
+  const el=document.getElementById('row-'+c.id);if(!el)return;
+  try{
+    const {docs:cand}=await search('('+c.q+') AND '+langQ(),1,40);
+    const docs=(await keepAllowed(cand)).slice(0,18);
+    el.innerHTML=docs.length?docs.map(d=>tileHTML(d)).join(''):'<div class="msg">Nada com dublagem ou legenda em PT-BR nesta categoria.</div>';
+    enrich(el);
+    if(c.id==='filmes'&&docs.length)hero(docs[Math.floor(Math.random()*Math.min(8,docs.length))]);
+  }catch(e){el.innerHTML=errHTML('row:'+c.id)}
+}
+function hero(d){
+  const h=$('#hero');if(!h)return;
+  h.innerHTML=`<img src="${thumb(d.identifier)}" alt=""><div><h3 data-id="${esc(d.identifier)}">${esc(showTitle(d.identifier,first(d.title)).main)}</h3><button class="btn" data-id="${esc(d.identifier)}">▶ Assistir</button></div>`;
+}
+
+/* ---------- VER TUDO ---------- */
+let allState=null;
+async function openAll(cid){
+  const c=CATS.find(x=>x.id===cid);if(!c)return;
+  allState={c,page:1,total:0};
+  show('all');
+  $('#v-all').innerHTML=`<h2>${esc(c.name)}<button data-go="home">‹ Voltar</button></h2><div class="grid" id="allgrid"></div><div id="allmore"></div>`;
+  moreAll();
+}
+async function moreAll(){
+  const s=allState,g=$('#allgrid'),m=$('#allmore');
+  m.innerHTML='<div class="msg">Carregando…</div>';
+  try{
+    const r=await search('('+s.c.q+') AND '+langQ(),s.page,40);s.total=r.total;
+    const ok=await keepAllowed(r.docs);
+    g.insertAdjacentHTML('beforeend',ok.map(d=>tileHTML(d)).join(''));enrich(g);
+    if(!g.children.length&&s.page*40>=s.total)g.outerHTML='<div class="msg">Nada com dublagem ou legenda em PT-BR aqui.</div>';
+    m.innerHTML=s.page*40<s.total?'<div class="msg"><button data-allmore>Carregar mais</button></div>':'';
+    s.page++;
+  }catch(e){m.innerHTML=errHTML('all')}
+}
+
+/* ---------- BUSCA ---------- */
+let sCat='';let sState=null;
+function renderCats(){
+  $('#cats').innerHTML=LANGS.map(l=>`<button class="chip ${l.id===lang?'on':''}" data-lang="${l.id}">${esc(l.name)}</button>`).join('')+'<span style="flex-basis:100%"></span>'+[{id:'',name:'Tudo'}].concat(CATS).map(c=>`<button class="chip ${c.id===sCat?'on':''}" data-cat="${c.id}">${esc(c.name)}</button>`).join('');
+}
+async function doSearch(page=1){
+  const raw=$('#q').value.trim();const out=$('#sres');
+  const c=CATS.find(x=>x.id===sCat);
+  if(!raw&&!c){out.innerHTML='<div class="msg">Digite um título, ator, diretor ou tema. Ex.: Chaplin, Popeye, Drácula, faroeste.</div>';return}
+  const words=raw.replace(/[^\p{L}\p{N}\s'-]/gu,' ').trim();
+  let q=(words?`(title:(${words}) OR subject:(${words}) OR creator:(${words}) OR description:(${words}))`:'*:*')+' AND '+(c?'('+c.q+')':ALLCOL);
+  if(page===1){
+    out.innerHTML='<h2>Resultados</h2><div class="grid" id="sgrid"></div><div id="smore"></div><div class="msg">Buscando…</div>';
+    const ids=words?await iaIdsByPtTitle(words):[];
+    out.lastElementChild.remove();
+    if(ids.length)q=`((${q}) OR identifier:(${ids.join(' OR ')}))`;
+    sState={q:q+' AND '+langQ(),page:1};
+  }
+  const m=$('#smore');m.innerHTML='<div class="msg">Buscando…</div>';
+  try{
+    const r=await search(sState.q,sState.page,40);
+    const ok=await keepAllowed(r.docs);
+    if(sState.page===1&&!ok.length&&r.total<=40){out.innerHTML='<div class="msg">Nenhum resultado com dublagem ou legenda em PT-BR. Tente outra palavra ou outro idioma.</div>';return}
+    $('#sgrid').insertAdjacentHTML('beforeend',ok.map(d=>tileHTML(d)).join(''));enrich($('#sgrid'));
+    m.innerHTML=sState.page*40<r.total?'<div class="msg"><button data-smore>Carregar mais</button></div>':'';
+    sState.page++;
+  }catch(e){m.innerHTML=errHTML('search')}
+}
+
+/* ---------- AO VIVO ---------- */
+const allChans=()=>PRESET_CH.concat(chans);
+function parseYT(u){
+  u=u.trim();let m;
+  if(m=u.match(/(?:youtube\.com\/channel\/)(UC[\w-]{22})/))return{ch:m[1]};
+  if(/^UC[\w-]{22}$/.test(u))return{ch:u};
+  if(m=u.match(/(?:v=|youtu\.be\/|\/live\/|\/embed\/|\/shorts\/)([\w-]{11})/))return{vid:m[1]};
+  if(/^[\w-]{11}$/.test(u))return{vid:u};
+  return null;
+}
+function renderLive(){
+  $('#v-live').innerHTML=`<h2>Canais ao vivo</h2><div class="live">${allChans().map(c=>`<button class="ch" data-ch="${esc(c.id)}"><span class="dot"></span><b>${esc(c.name)}</b><small>${esc(c.sub||'YouTube oficial')}</small>${c.preset?'':`<span class="del" data-delch="${esc(c.id)}" role="button" aria-label="Remover">✕</span>`}</button>`).join('')}</div>
+  <h2>Adicionar canal</h2>
+  <form class="add" id="addch"><input id="chname" placeholder="Nome do canal" required maxlength="40"><input id="churl" placeholder="Link do YouTube (canal com /channel/UC… ou vídeo ao vivo)" required><button class="btn">Adicionar</button></form>
+  <p class="note">Use links oficiais das emissoras no YouTube. Para um canal, use o endereço que tem /channel/UC…; se o canal não estiver ao vivo naquele momento, o YouTube mostra um aviso. Também funciona com o link de uma live ou vídeo específico.</p>`;
+}
+function playChannel(id){
+  const c=allChans().find(x=>x.id===id);if(!c)return;
+  const src=c.ch?`https://www.youtube.com/embed/live_stream?channel=${encodeURIComponent(c.ch)}&autoplay=1&playsinline=1`:`https://www.youtube.com/embed/${encodeURIComponent(c.vid)}?autoplay=1&playsinline=1`;
+  openPlayer(c.name);
+  $('#stage').innerHTML=`<iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+}
+
+/* ---------- MINHA LISTA ---------- */
+function renderList(){
+  const cont=Object.entries(prog).filter(([,p])=>!p.done).sort((a,b)=>b[1].at-a[1].at);
+  const seen=Object.entries(prog).filter(([,p])=>p.done).sort((a,b)=>b[1].at-a[1].at);
+  let h=`<h2>Favoritos</h2>`+(favs.length?`<div class="grid">${favs.map(f=>tileHTML({identifier:f.id,title:f.title,year:f.year})).join('')}</div>`:`<div class="msg">Toque em ♡ Favoritar em qualquer título para ele aparecer aqui.</div>`);
+  h+=`<h2>Continuar assistindo</h2>`+(cont.length?`<div class="row wide">${cont.map(([id,p])=>tileHTML({identifier:id,title:p.title,year:p.year},1)).join('')}</div>`:`<div class="msg">Nada em andamento.</div>`);
+  if(seen.length)h+=`<h2>Já assistidos<button data-clearseen>Limpar</button></h2><div class="row">${seen.map(([id,p])=>tileHTML({identifier:id,title:p.title,year:p.year})).join('')}</div>`;
+  $('#v-list').innerHTML=h;enrich($('#v-list'));
+}
+
+/* ---------- DETALHES ---------- */
+let cur=null; // {id,title,year,files:[]}
+function pickFiles(files){
+  const vids=files.filter(f=>/\.(mp4|m4v|webm)$/i.test(f.name)&&!/thumb|sample|trailer/i.test(f.name)&&f.source!=='metadata');
+  const byBase=new Map();
+  for(const f of vids){
+    const base=f.name.replace(/\.(mp4|m4v|webm)$/i,'').replace(/(_512kb|\.ia|_edit)$/i,'');
+    const score=(/h\.264/i.test(f.format)?3:0)+(/mpeg4/i.test(f.format)?2:0)+(/512kb/i.test(f.name)?-1:0)+(f.source==='original'?1:0);
+    const prev=byBase.get(base);
+    if(!prev||score>prev.score)byBase.set(base,{name:f.name,score,len:+f.length||0,label:(f.title||base).replace(/[_]+/g,' ')});
+  }
+  return [...byBase.values()].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
+}
+async function openItem(id){
+  const sh=$('#sheet'),box=$('#sbox');
+  sh.classList.add('on');
+  box.innerHTML=`<div class="cover"><img src="${thumb(id)}" alt=""><button class="x" data-close>✕</button></div><div class="in"><div class="msg">Carregando…</div></div>`;
+  try{
+    const j=await getJSON(IA+'/metadata/'+encodeURIComponent(id));
+    const md=j.metadata||{};const files=pickFiles(j.files||[]);
+    const jv=judge(md,j.files||[]);ver[id]=jv;store.set('ver',ver);
+    await fetchTitles([id]);
+    const st=showTitle(id,first(md.title)||id);
+    cur={id,title:st.main,orig:st.orig,year:first(md.year)||(first(md.date)||'').slice(0,4),files,subs:subsOf(j.files||[]),lang:jv.l};
+    const lname=(LANGS.find(x=>x.id===jv.l)||{}).name||'';
+    const audio=jv.l==='pt'?'Áudio em português':(lname?'Áudio: '+lname.split(' ·')[0]:'Áudio: idioma não informado')+(jv.sub?' · Legenda PT-BR':'');
+    if(!jv.ok){box.querySelector('.in').innerHTML=`<h3>${esc(cur.title)}</h3><div class="msg">Este título não tem dublagem nem legenda em PT-BR e foi bloqueado pelo filtro de idioma.</div>`;return}
+    const isFav=favs.some(f=>f.id===id);
+    const p=prog[id];
+    const desc=txt(first(md.description)||'');
+    const lic=first(md.licenseurl);
+    let h=`<h3>${esc(cur.title)}</h3>${cur.orig?`<div class="meta" style="margin:2px 0 0">Título original: ${esc(cur.orig)}</div>`:''}<div class="meta">${esc([audio,cur.year,first(md.creator),files.length>1?files.length+' episódios/partes':''].filter(Boolean).join(' · '))}</div>`;
+    h+=`<div class="acts">${files.length?`<button class="btn" data-play="${p&&!p.done?esc(p.file):esc(files[0].name)}">${p&&!p.done?'▶ Continuar de '+fmtT(p.t):'▶ Assistir'}</button>`:''}<button class="btn ghost" data-fav>${isFav?'♥ Na lista':'♡ Favoritar'}</button></div>`;
+    if(!files.length)h+=`<div class="msg">Este título não tem vídeo compatível para tocar no app.</div>`;
+    if(desc)h+=`<div class="desc" id="desc">${esc(desc)}</div><button class="more" data-moredesc>Ler mais</button>`;
+    if(files.length>1)h+=`<ul class="eps">${files.map((f,i)=>`<li><button data-play="${esc(f.name)}"><span class="n">${i+1}</span><span>${esc(f.label)}</span><span class="p">${p&&p.file===f.name?'▶ '+fmtT(p.t):(f.len?fmtT(f.len):'')}</span></button></li>`).join('')}</ul>`;
+    h+=`<div class="lic">Fonte: Internet Archive · ${lic&&/^https:\/\//.test(lic)?'Licença: '+esc(lic):'Acervo de domínio público/livre'} </div>`;
+    box.querySelector('.in').innerHTML=h;
+  }catch(e){box.querySelector('.in').innerHTML=errHTML('item:'+id)}
+}
+function closeSheet(){$('#sheet').classList.remove('on')}
+function toggleFav(){
+  if(!cur)return;
+  const i=favs.findIndex(f=>f.id===cur.id);
+  if(i>=0){favs.splice(i,1);toast('Removido da lista')}else{favs.unshift({id:cur.id,title:cur.title,year:cur.year});toast('Adicionado à Minha lista')}
+  store.set('favs',favs);
+  const b=document.querySelector('[data-fav]');if(b)b.textContent=i>=0?'♡ Favoritar':'♥ Na lista';
+}
+
+/* ---------- PLAYER ---------- */
+let saveTimer=null;
+function openPlayer(title){
+  $('#ptitle').textContent=title;$('#player').classList.add('on');$('#pnext').hidden=true;
+  try{screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(()=>{})}catch(e){}
+}
+function closePlayer(){
+  const v=$('#stage video');if(v)saveProg(v);
+  clearInterval(saveTimer);$('#stage').innerHTML='';$('#player').classList.remove('on');
+  try{screen.orientation&&screen.orientation.unlock&&screen.orientation.unlock()}catch(e){}
+  if($('#v-home').classList.contains('on'))renderHome();
+  if($('#v-list').classList.contains('on'))renderList();
+}
+function saveProg(v){
+  if(!cur||!v||!v.dataset.file||!v.currentTime)return;
+  const d=v.duration||0;const done=d&&v.currentTime>d-30;
+  const idx=cur.files.findIndex(f=>f.name===v.dataset.file);
+  const last=idx===cur.files.length-1;
+  prog[cur.id]={file:v.dataset.file,ep:cur.files.length>1?idx+1:0,t:done?0:v.currentTime,d,title:cur.title,year:cur.year,at:Date.now(),done:!!(done&&last)};
+  if(done&&!last){prog[cur.id].file=cur.files[idx+1].name;prog[cur.id].ep=idx+2;prog[cur.id].t=0}
+  store.set('prog',prog);
+}
+function playFile(name){
+  if(!cur)return;
+  const f=cur.files.find(x=>x.name===name);if(!f)return;
+  const idx=cur.files.indexOf(f);
+  const label=cur.files.length>1?`${cur.title} · ${idx+1}. ${f.label}`:cur.title;
+  if(!$('#player').classList.contains('on'))openPlayer(label);else $('#ptitle').textContent=label;
+  const src=`${IA}/download/${encodeURIComponent(cur.id)}/${name.split('/').map(encodeURIComponent).join('/')}`;
+  $('#stage').innerHTML=`<video controls autoplay playsinline preload="auto"></video>`;
+  const v=$('#stage video');v.dataset.file=name;v.src=src;
+  attachSub(v,name);
+  const p=prog[cur.id];
+  v.addEventListener('loadedmetadata',()=>{if(p&&p.file===name&&p.t>5&&p.t<v.duration-30)v.currentTime=p.t});
+  v.addEventListener('pause',()=>saveProg(v));
+  v.addEventListener('error',()=>{$('#stage').innerHTML='<div class="msg">Não foi possível tocar este vídeo. Tente outro episódio ou título.</div>'});
+  const nb=$('#pnext');
+  nb.hidden=idx>=cur.files.length-1;nb.onclick=()=>{saveProg(v);playFile(cur.files[idx+1].name)};
+  v.addEventListener('ended',()=>{saveProg(v);if(idx<cur.files.length-1){toast('Próximo episódio');playFile(cur.files[idx+1].name)}});
+  clearInterval(saveTimer);saveTimer=setInterval(()=>{if(!v.paused)saveProg(v)},5000);
+}
+
+function srt2vtt(t){return 'WEBVTT\n\n'+t.replace(/\r/g,'').replace(/^\uFEFF/,'').replace(/(\d\d:\d\d:\d\d),(\d\d\d)/g,'$1.$2')}
+async function attachSub(v,name){
+  if(!cur.subs||!cur.subs.length)return;
+  const base=name.replace(/\.[^.]+$/,'').replace(/(_512kb|\.ia)$/i,'').toLowerCase();
+  // legenda do mesmo episódio; se o título tem um vídeo só, usa a primeira legenda PT
+  const s=cur.subs.find(f=>f.name.toLowerCase().startsWith(base))||(cur.files.length===1?cur.subs[0]:null);
+  if(!s)return;
+  try{
+    const r=await fetch(`${IA}/download/${encodeURIComponent(cur.id)}/${s.name.split('/').map(encodeURIComponent).join('/')}`);
+    let t=await r.text();if(/\.srt$/i.test(s.name))t=srt2vtt(t);
+    const url=URL.createObjectURL(new Blob([t],{type:'text/vtt'}));
+    const tr=document.createElement('track');tr.kind='subtitles';tr.srclang='pt';tr.label='Português (BR)';tr.src=url;tr.default=true;
+    v.appendChild(tr);
+    tr.addEventListener('load',()=>{if(cur.lang!=='pt')tr.track.mode='showing'});
+    if(cur.lang!=='pt')setTimeout(()=>{try{v.textTracks[0].mode='showing'}catch(e){}},300);
+  }catch(e){toast('Não foi possível carregar a legenda')}
+}
+
+/* ---------- navegação ---------- */
+function show(name){
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+name));
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===name||(name==='all'&&b.dataset.v==='home')));
+  if(name==='live')renderLive();
+  if(name==='list')renderList();
+  if(name==='search'&&!$('#sres').innerHTML){renderCats();doSearch()}
+  window.scrollTo(0,0);
+}
+// botão "voltar" (Android chama window.mpBack)
+window.mpBack=function(){
+  if($('#player').classList.contains('on')){closePlayer();return true}
+  if($('#sheet').classList.contains('on')){closeSheet();return true}
+  if(!$('#v-home').classList.contains('on')){show('home');return true}
+  return false;
+};
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,[data-delch]');if(!t)return;
+  const d=t.dataset;
+  if(d.delch!==undefined){e.stopPropagation();chans=chans.filter(c=>c.id!==d.delch);store.set('chans',chans);renderLive();toast('Canal removido');return}
+  if(d.v){show(d.v);return}
+  if(d.go){show(d.go);return}
+  if(d.id){openItem(d.id);return}
+  if(d.all){openAll(d.all);return}
+  if(d.allmore!==undefined){moreAll();return}
+  if(d.smore!==undefined){doSearch(2);return}
+  if(d.lang!==undefined){lang=d.lang;store.set('lang',lang);if($('#v-search').classList.contains('on')){renderCats();doSearch()}else renderHome();return}
+  if(d.cat!==undefined){sCat=d.cat;renderCats();doSearch();return}
+  if(d.close!==undefined){closeSheet();return}
+  if(d.fav!==undefined){toggleFav();return}
+  if(d.moredesc!==undefined){$('#desc').classList.add('open');t.remove();return}
+  if(d.play){playFile(d.play);return}
+  if(d.ch){playChannel(d.ch);return}
+  if(d.clearseen!==undefined){for(const k in prog)if(prog[k].done)delete prog[k];store.set('prog',prog);renderList();return}
+  if(d.retry){const [k,v]=d.retry.split(/:(.*)/);if(k==='row')loadRow(CATS.find(c=>c.id===v));else if(k==='all')moreAll();else if(k==='search')doSearch(sState&&sState.page>1?2:1);else if(k==='item'){closeSheet();openItem(v)}return}
+});
+$('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
+$('#pback').addEventListener('click',closePlayer);
+$('#sform').addEventListener('submit',e=>{e.preventDefault();$('#q').blur();doSearch()});
+document.addEventListener('submit',e=>{
+  if(e.target.id!=='addch')return;e.preventDefault();
+  const name=$('#chname').value.trim(),y=parseYT($('#churl').value);
+  if(!y){toast('Link do YouTube inválido');return}
+  chans.push(Object.assign({id:'c'+Date.now(),name,sub:'Adicionado por você'},y));store.set('chans',chans);renderLive();toast('Canal adicionado');
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){const v=$('#stage video');if(v)saveProg(v)}});
+
+renderHome();
+}
+</script>
+</body>
+</html>

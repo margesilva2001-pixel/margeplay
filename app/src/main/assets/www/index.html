@@ -44,7 +44,23 @@ h2 button{background:none;border:0;color:var(--acc);font-size:14px;padding:6px 0
 .chips{display:flex;gap:8px;flex-wrap:wrap;padding:12px 16px 0}
 .chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;min-height:40px}
 .chip.on{background:var(--acc);color:#111;border-color:var(--acc)}
-nav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);background:#120f18f2;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(10px)}
+header .gear{margin-left:auto;background:none;border:0;color:var(--dim);width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+header .gear svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sel{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 16px 0;color:var(--dim);font-size:14px}
+.sel select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-height:44px;font:inherit}
+.count{padding:10px 16px 6px;color:var(--dim);font-size:14px}
+.set{padding:4px 16px 0}
+.set h3{font-size:18px;margin:14px 0 6px}
+.set label.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-height:52px;margin:8px 0}
+.set label.sw input{width:22px;height:22px;accent-color:var(--acc);flex:none}
+.set input[type=url]{width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:15px;min-height:48px;margin:6px 0}
+.set .acts{margin-top:10px}
+.prov{list-style:none;margin:6px 0;padding:0}
+.prov li{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:6px;font-size:14px;overflow-wrap:anywhere}
+.prov li.on{border-color:var(--acc)}
+.prov li span{color:var(--dim);flex:none}
+.stat{font-size:13px;color:var(--dim);margin:6px 0}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);background:#120f18f2;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(10px)}
 nav button{background:none;border:0;padding:8px 0 10px;color:var(--dim);font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:58px}
 nav button.on{color:var(--acc)}
 nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -76,6 +92,8 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stro
 #player .top{display:flex;align-items:center;gap:8px;padding:calc(6px + env(safe-area-inset-top)) 8px 6px}
 #player .top b{flex:1;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #player .top button{background:none;border:0;color:#fff;min-width:44px;min-height:44px;font-size:15px}
+#player .top a.yt{color:#111;background:var(--acc);border-radius:999px;padding:8px 12px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap}
+#player .tip{font-size:12px;color:var(--dim);padding:6px 12px calc(6px + env(safe-area-inset-bottom));text-align:center}
 #stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
 #stage video,#stage iframe{width:100%;height:100%;max-height:100%;border:0;background:#000}
 .live{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 16px}
@@ -93,9 +111,10 @@ form.add input{background:var(--card);border:1px solid var(--line);border-radius
 </style>
 </head>
 <body>
-<header><img src="icon.png" alt=""><h1>MARGE<b>PLAY</b></h1></header>
+<header><img src="icon.png" alt=""><h1>MARGE<b>PLAY</b></h1><button class="gear" data-settings aria-label="Ajustes"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></header>
 <main>
   <section class="view on" id="v-home"></section>
+  <section class="view" id="v-lib"></section>
   <section class="view" id="v-search">
     <form class="search" id="sform"><input id="q" type="search" placeholder="Buscar filmes, desenhos, séries…" autocomplete="off" enterkeyhint="search"><button class="btn">Buscar</button></form>
     <div class="chips" id="cats"></div>
@@ -103,11 +122,11 @@ form.add input{background:var(--card);border:1px solid var(--line);border-radius
   </section>
   <section class="view" id="v-live"></section>
   <section class="view" id="v-list"></section>
-  <section class="view" id="v-all"></section>
 </main>
 
 <nav id="nav">
   <button data-v="home" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</button>
+  <button data-v="lib"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/></svg>Biblioteca</button>
   <button data-v="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/></svg>Buscar</button>
   <button data-v="live"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M8 2l4 4 4-4"/></svg>Ao vivo</button>
   <button data-v="list"><svg viewBox="0 0 24 24"><path d="M12 21l-8-8a5 5 0 0 1 8-6 5 5 0 0 1 8 6z"/></svg>Minha lista</button>
@@ -116,15 +135,23 @@ form.add input{background:var(--card);border:1px solid var(--line);border-radius
 <div class="sheet" id="sheet"><div class="box" id="sbox"></div></div>
 
 <div id="player">
-  <div class="top"><button id="pback" aria-label="Voltar">←</button><b id="ptitle"></b><button id="pnext" hidden>Próximo ›</button></div>
+  <div class="top"><button id="pback" aria-label="Voltar">←</button><b id="ptitle"></b><button id="pnext" hidden>Próximo ›</button><a id="pyt" class="yt" hidden>Abrir no YouTube</a></div>
   <div id="stage"></div>
+  <div class="tip" id="ptip" hidden>Tela preta, "Erro 153" ou "vídeo indisponível"? Toque em Abrir no YouTube. Canais só tocam aqui quando estão ao vivo.</div>
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="config.js"></script>
 <script>
 {
-const IA='https://archive.org';
-const CATS=[
+/* ---------- armazenamento ---------- */
+const store={get(k,d){try{const v=localStorage.getItem('mp_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('mp_'+k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- provedores padrão (embutidos no APK) ----------
+   A mesma estrutura do arquivo providers.json na raiz do projeto.
+   Quando a atualização automática está ligada, o app baixa a versão
+   mais nova desse arquivo e troca os links sem precisar gerar outro APK. */
+const DEF_CATS=[
  {id:'filmes',name:'Filmes clássicos',q:'collection:feature_films'},
  {id:'desenhos',name:'Desenhos e animações',q:'collection:(classic_cartoons OR animationandcartoons)'},
  {id:'anime',name:'Anime clássico',q:'collection:(animationandcartoons OR classic_cartoons) AND (subject:anime OR subject:japanese OR title:anime)'},
@@ -134,14 +161,40 @@ const CATS=[
  {id:'mudo',name:'Cinema mudo',q:'collection:silent_films'},
  {id:'abertos',name:'Filmes abertos (Blender)',q:'(creator:"Blender Foundation" OR subject:"blender open movie" OR subject:"open movie")'}
 ];
-const ALLCOL='collection:(feature_films OR classic_cartoons OR animationandcartoons OR classic_tv OR SciFi_Horror OR film_noir OR silent_films)';
-const PRESET_CH=[
- {id:'cultura',name:'TV Cultura',sub:'Canal oficial · PT-BR',ch:'UCjOJvvYe6tyEHY21OD33h8A',preset:1},
- {id:'lofi',name:'Lofi Girl',sub:'Música 24 h · sem diálogo',ch:'UCSJ4gkVC6NrvII8umztf0Ow',preset:1}
+const DEF_CH=[
+ {id:'cultura',name:'TV Cultura',sub:'Canal oficial · PT-BR',ch:'UCjOJvvYe6tyEHY21OD33h8A'},
+ {id:'lofi',name:'Lofi Girl',sub:'Música 24 h · sem diálogo',ch:'UCSJ4gkVC6NrvII8umztf0Ow'}
 ];
-/* ---------- idioma: só entra o que é PT ou tem legenda PT-BR ---------- */
+const DEF_PROV={version:1,archive:['https://archive.org'],wikidata:'https://query.wikidata.org/sparql',categories:DEF_CATS,channels:DEF_CH};
+
+const isHttps=u=>typeof u==='string'&&/^https:\/\/[a-z0-9.\-]+(:\d+)?(\/[^\s"'<>]*)?$/i.test(u);
+function validProv(p){
+  if(!p||typeof p!=='object')return false;
+  if(!Array.isArray(p.archive)||!p.archive.length||!p.archive.every(isHttps))return false;
+  if(p.wikidata!=null&&!isHttps(p.wikidata))return false;
+  if(p.categories!=null&&!(Array.isArray(p.categories)&&p.categories.every(c=>c&&/^[\w-]{1,30}$/.test(c.id)&&typeof c.name==='string'&&typeof c.q==='string')))return false;
+  if(p.channels!=null&&!(Array.isArray(p.channels)&&p.channels.every(c=>c&&typeof c.id==='string'&&typeof c.name==='string'&&(/^UC[\w-]{22}$/.test(c.ch||'')||/^[\w-]{11}$/.test(c.vid||'')))))return false;
+  return true;
+}
+let PROV,IA,WD,CATS,PRESET_CH,ALLCOL;
+const cache=new Map();
+function applyProv(p){
+  if(!validProv(p))p=DEF_PROV;
+  PROV={version:p.version||0,updated:p.updated||'',archive:p.archive.map(u=>u.replace(/\/+$/,'')),wikidata:p.wikidata||DEF_PROV.wikidata,categories:(p.categories&&p.categories.length?p.categories:DEF_CATS),channels:(p.channels||DEF_CH)};
+  CATS=PROV.categories;
+  PRESET_CH=PROV.channels.map(c=>Object.assign({},c,{preset:1}));
+  WD=PROV.wikidata;
+  ALLCOL='('+CATS.map(c=>'('+c.q+')').join(' OR ')+')';
+  const saved=store.get('iabase','');
+  IA=PROV.archive.includes(saved)?saved:PROV.archive[0];
+  cache.clear();
+}
+applyProv(store.get('prov',null)||DEF_PROV);
+
+/* ---------- idioma ---------- */
 const LANGS=[
- {id:'',name:'Todos'},
+ {id:'',name:'Todos os idiomas'},
+ {id:'ptany',name:'Só com PT (dublado ou legendado)'},
  {id:'pt',name:'Português (dublado/original)',re:/^(pt|por|pt-br|portuguese|portugu[eê]s|brazilian)/i,q:'language:(portuguese OR por OR pt OR "pt-br" OR "português" OR brazilian)'},
  {id:'en',name:'Inglês · leg. PT-BR',re:/^(en|eng|english|ingl[eê]s)/i,q:'language:(english OR eng OR en)'},
  {id:'es',name:'Espanhol · leg. PT-BR',re:/^(es|spa|spanish|espa[nñ]ol)/i,q:'language:(spanish OR spa OR es)'},
@@ -155,12 +208,14 @@ const SUBQ='format:(SubRip OR "Web Video Text Tracks" OR "Closed Caption Text")'
 const PTSUB=/(^|[._\-\s(\[])(pt|por|ptbr|pt[-_]br|portugu[eê]s|portuguese|brazil|brasil)([._\-\s)\]]|$)/i;
 
 
-/* ---------- armazenamento ---------- */
-const store={get(k,d){try{const v=localStorage.getItem('mp_'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('mp_'+k,JSON.stringify(v))}catch(e){}}};
 let favs=store.get('favs',[]);       // [{id,title,year}]
 let prog=store.get('prog',{});       // {id:{file,ep,t,d,title,year,at}}
 let chans=store.get('chans',[]);     // canais adicionados
-let lang=store.get('lang','');
+// versão 1 guardava '' querendo dizer "só PT"; a partir da 2 '' é "todos os idiomas"
+let lang=store.get('lang2','');
+const DEF_CFG_URL=String(window.MP_CONFIG_URL||'').trim();
+let pset=store.get('pset',{auto:true,url:DEF_CFG_URL,last:0,status:''});
+if(!pset.url&&DEF_CFG_URL)pset.url=DEF_CFG_URL;
 let ver=store.get('ver',{});         // verificação de idioma por título
 let ttl=store.get('ttl',{});         // títulos oficiais (Wikidata): id -> {pt,orig}
 
@@ -172,20 +227,35 @@ const txt=h=>{try{return new DOMParser().parseFromString(String(h).replace(/<br\
 const first=v=>Array.isArray(v)?v[0]:v;
 const fmtT=s=>{s=Math.floor(s||0);const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')};
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.k);toast.k=setTimeout(()=>t.classList.remove('on'),1800)}
-const cache=new Map();
-async function getJSON(url){
-  if(cache.has(url))return cache.get(url);
-  const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),15000);
-  try{const r=await fetch(url,{signal:ctl.signal});if(!r.ok)throw new Error(r.status);const j=await r.json();cache.set(url,j);return j}
+async function fetchJSON(url,ms=20000){
+  const ctl=new AbortController();const tm=setTimeout(()=>ctl.abort(),ms);
+  try{const r=await fetch(url,{signal:ctl.signal,cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);return await r.json()}
+  catch(e){throw new Error(e.name==='AbortError'?'tempo esgotado':(e.message||'falha de rede'))}
   finally{clearTimeout(tm)}
 }
-async function search(q,page=1,rows=30){
+// busca no provedor ativo; se falhar, tenta de novo e depois os outros provedores da lista
+function iaJSON(path){
+  if(cache.has(path))return cache.get(path);
+  const p=(async()=>{
+    const bases=[IA].concat(PROV.archive.filter(b=>b!==IA));let err;
+    for(const b of bases)for(let t=0;t<2;t++){
+      try{const j=await fetchJSON(b+path);if(b!==IA){IA=b;store.set('iabase',b)}return j}
+      catch(e){err=e}
+    }
+    throw err||new Error('sem provedor');
+  })();
+  cache.set(path,p);p.catch(()=>cache.delete(path));
+  return p;
+}
+async function search(q,page=1,rows=30,sort='downloads desc'){
   const p=new URLSearchParams({q:'('+q+') AND mediatype:movies',rows,page,output:'json'});
   ['identifier','title','year','downloads'].forEach(f=>p.append('fl[]',f));
-  p.append('sort[]','downloads desc');
-  const j=await getJSON(IA+'/advancedsearch.php?'+p);
+  p.append('sort[]',sort);
+  const j=await iaJSON('/advancedsearch.php?'+p);
+  if(!j||!j.response)throw new Error('resposta inesperada do provedor');
   return {total:j.response.numFound,docs:j.response.docs};
 }
+const withLang=q=>{const l=langQ();return l?'('+q+') AND '+l:q};
 
 function langOf(md){
   const raw=[].concat(md.language||[]).join(' ').trim();
@@ -199,30 +269,31 @@ function judge(md,files){
 }
 function langQ(){
   const L=LANGS.find(x=>x.id===lang);
-  const pt=LANGS[1].q;
-  if(!L||!L.id)return `(${pt} OR ${SUBQ})`;
+  const pt=LANGS.find(x=>x.id==='pt').q;
+  if(!L||!L.id)return '';                       // todos os idiomas: sem filtro
+  if(L.id==='ptany')return `(${pt} OR ${SUBQ})`;
   if(L.id==='pt')return pt;
-  if(L.id==='xx')return `(${SUBQ} AND NOT ${LANGS.slice(1,8).map(x=>x.q).join(' AND NOT ')})`;
+  if(L.id==='xx')return `(${SUBQ} AND NOT ${LANGS.filter(x=>x.q).map(x=>x.q).join(' AND NOT ')})`;
   return `(${L.q} AND ${SUBQ})`;
 }
 async function verify(id){
   if(ver[id])return ver[id];
-  const j=await getJSON(IA+'/metadata/'+encodeURIComponent(id));
+  const j=await iaJSON('/metadata/'+encodeURIComponent(id));
   const v=judge(j.metadata||{},j.files||[]);
   ver[id]=v;store.set('ver',ver);return v;
 }
 // filtra uma lista de resultados, verificando metadados em paralelo
 async function keepAllowed(docs){
+  if(!lang)return docs;                          // sem filtro de idioma: mostra tudo
   const out=[];let i=0;
-  async function worker(){while(i<docs.length){const d=docs[i++];try{const v=await verify(d.identifier);if(v.ok&&(!lang||v.l===lang||(lang==='xx'&&v.l!=='pt')))out.push(d)}catch(e){}}}
+  async function worker(){while(i<docs.length){const d=docs[i++];try{const v=await verify(d.identifier);if(v.ok&&(lang==='ptany'||v.l===lang||(lang==='xx'&&v.l!=='pt')))out.push(d)}catch(e){}}}
   await Promise.all(Array.from({length:6},worker));
   const order=new Map(docs.map((d,k)=>[d.identifier,k]));
   return out.sort((a,b)=>order.get(a.identifier)-order.get(b.identifier));
 }
-function badge(id){const v=ver[id];if(!v)return '';return `<span class="bdg">${v.l==='pt'?'DUB PT':'LEG PT'}</span>`}
+function badge(id){const v=ver[id];if(!v||!v.ok)return '';return `<span class="bdg">${v.l==='pt'?'DUB PT':'LEG PT'}</span>`}
 
 /* ---------- títulos oficiais em português (Wikidata) ---------- */
-const WD='https://query.wikidata.org/sparql';
 function cleanTitle(t0){
   const raw=String(t0||'');let t=raw.replace(/[_]+/g,' ');
   t=t.replace(/\.(mp4|avi|mkv|ogv|mpeg|mpg)$/i,'');
@@ -295,7 +366,8 @@ function tileHTML(d,wide){
   return `<button class="tile" data-id="${esc(d.identifier)}" data-raw="${esc(raw)}"><div class="th"><img loading="lazy" src="${thumb(d.identifier)}" alt="">${badge(d.identifier)}${pct?`<span class="bar" style="width:${pct}%"></span>`:''}</div><div class="t">${esc(st.main)}</div><div class="o">${esc(st.orig)}</div><div class="y">${esc(wide&&pr?(pr.ep?'Ep. '+pr.ep+' · ':'')+'parou em '+fmtT(pr.t):(d.year||''))}</div></button>`;
 }
 const skels=n=>Array.from({length:n},()=>'<div class="skel"></div>').join('');
-function errHTML(retry){return `<div class="msg">Não foi possível carregar. Verifique a internet. <button data-retry="${retry}">Tentar de novo</button></div>`}
+function errHTML(retry,e){return `<div class="msg">Não foi possível carregar${e&&e.message?' ('+esc(e.message)+')':''}. Verifique a internet ou atualize os provedores em Ajustes. <button data-retry="${retry}">Tentar de novo</button></div>`}
+const emptyMsg=()=>lang?'Nada neste idioma aqui. Toque em "Todos os idiomas" para ver o acervo completo.':'Nada encontrado aqui.';
 
 /* ---------- INÍCIO ---------- */
 function renderHome(){
@@ -304,45 +376,78 @@ function renderHome(){
   let h=`<div class="langs">${LANGS.map(l=>`<button class="chip ${l.id===lang?'on':''}" data-lang="${l.id}">${esc(l.name)}</button>`).join('')}</div><div id="hero" class="hero"></div>`;
   if(cont.length)h+=`<h2>Continuar assistindo</h2><div class="row wide">${cont.map(([id,p])=>tileHTML({identifier:id,title:p.title,year:p.year},1)).join('')}</div>`;
   h+=CATS.map(c=>`<h2>${esc(c.name)}<button data-all="${c.id}">Ver tudo</button></h2><div class="row" id="row-${c.id}">${skels(6)}</div>`).join('');
-  h+=`<p class="note">Só aparecem títulos com áudio em português ou com legenda em PT-BR. Os marcados DUB PT têm áudio em português; os marcados LEG PT têm legenda em português. Conteúdo em domínio público ou com licença aberta, fornecido pelo Internet Archive (archive.org).</p>`;
+  h+=`<p class="note">${lang?'Filtro de idioma ligado. ':''}Os marcados DUB PT têm áudio em português; os marcados LEG PT têm legenda em português (aparecem quando o filtro de idioma está ligado). Conteúdo em domínio público ou com licença aberta, fornecido pelo Internet Archive (archive.org).</p>`;
   v.innerHTML=h;
-  CATS.forEach(loadRow);enrich(v);
+  CATS.forEach((c,i)=>loadRow(c,i));enrich(v);
 }
-async function loadRow(c){
+async function loadRow(c,i){
   const el=document.getElementById('row-'+c.id);if(!el)return;
   try{
-    const {docs:cand}=await search('('+c.q+') AND '+langQ(),1,40);
+    const {docs:cand}=await search(withLang(c.q),1,lang?40:20);
     const docs=(await keepAllowed(cand)).slice(0,18);
-    el.innerHTML=docs.length?docs.map(d=>tileHTML(d)).join(''):'<div class="msg">Nada com dublagem ou legenda em PT-BR nesta categoria.</div>';
+    el.innerHTML=docs.length?docs.map(d=>tileHTML(d)).join(''):`<div class="msg">${emptyMsg()}</div>`;
     enrich(el);
-    if(c.id==='filmes'&&docs.length)hero(docs[Math.floor(Math.random()*Math.min(8,docs.length))]);
-  }catch(e){el.innerHTML=errHTML('row:'+c.id)}
+    const hh=$('#hero');if(hh&&(i===0||!hh.innerHTML)&&docs.length)hero(docs[Math.floor(Math.random()*Math.min(8,docs.length))]);
+  }catch(e){el.innerHTML=errHTML('row:'+c.id,e)}
 }
 function hero(d){
   const h=$('#hero');if(!h)return;
   h.innerHTML=`<img src="${thumb(d.identifier)}" alt=""><div><h3 data-id="${esc(d.identifier)}">${esc(showTitle(d.identifier,first(d.title)).main)}</h3><button class="btn" data-id="${esc(d.identifier)}">▶ Assistir</button></div>`;
 }
 
-/* ---------- VER TUDO ---------- */
-let allState=null;
-async function openAll(cid){
-  const c=CATS.find(x=>x.id===cid);if(!c)return;
-  allState={c,page:1,total:0};
-  show('all');
-  $('#v-all').innerHTML=`<h2>${esc(c.name)}<button data-go="home">‹ Voltar</button></h2><div class="grid" id="allgrid"></div><div id="allmore"></div>`;
-  moreAll();
+/* ---------- BIBLIOTECA ---------- */
+const SORTS=[
+ {id:'downloads desc',name:'Mais assistidos'},
+ {id:'addeddate desc',name:'Adicionados recentemente'},
+ {id:'titleSorter asc',name:'Título (A–Z)'},
+ {id:'year desc',name:'Ano (mais novos)'},
+ {id:'year asc',name:'Ano (mais antigos)'}
+];
+const DECS=['','1900','1910','1920','1930','1940','1950','1960','1970','1980','1990','2000','2010'];
+let lib=store.get('lib',{cat:'',sort:'downloads desc',dec:''});
+let libState=null,libObs=null;
+function openLib(cid){if(cid!=null){lib.cat=cid;store.set('lib',lib)}show('lib')}
+function libQuery(){
+  const c=CATS.find(x=>x.id===lib.cat);
+  let q=c?'('+c.q+')':ALLCOL;
+  if(lib.dec)q+=` AND year:[${lib.dec} TO ${+lib.dec+9}]`;
+  return withLang(q);
 }
-async function moreAll(){
-  const s=allState,g=$('#allgrid'),m=$('#allmore');
-  m.innerHTML='<div class="msg">Carregando…</div>';
+function renderLib(){
+  if(!CATS.some(c=>c.id===lib.cat))lib.cat='';
+  const v=$('#v-lib');
+  v.innerHTML=`<h2>Biblioteca de filmes</h2>
+  <div class="langs">${[{id:'',name:'Tudo'}].concat(CATS).map(c=>`<button class="chip ${c.id===lib.cat?'on':''}" data-libcat="${esc(c.id)}">${esc(c.name)}</button>`).join('')}</div>
+  <div class="sel"><label>Ordenar <select id="libsort">${SORTS.map(s=>`<option value="${s.id}" ${s.id===lib.sort?'selected':''}>${s.name}</option>`).join('')}</select></label>
+  <label>Década <select id="libdec">${DECS.map(d=>`<option value="${d}" ${d===lib.dec?'selected':''}>${d?'Anos '+d.slice(2)+(d==='1900'?' (1900)':''):'Todas'}</option>`).join('')}</select></label></div>
+  <div class="langs" style="padding-top:10px">${LANGS.map(l=>`<button class="chip ${l.id===lang?'on':''}" data-lang="${l.id}">${esc(l.name)}</button>`).join('')}</div>
+  <div class="count" id="libcount"></div><div class="grid" id="libgrid"></div><div id="libmore"></div>`;
+  $('#libsort').onchange=e=>{lib.sort=e.target.value;store.set('lib',lib);renderLib()};
+  $('#libdec').onchange=e=>{lib.dec=e.target.value;store.set('lib',lib);renderLib()};
+  libState={q:libQuery(),page:1,total:0,busy:false,shown:0};
+  moreLib();
+}
+async function moreLib(){
+  const s=libState;if(!s||s.busy)return;s.busy=true;
+  const g=$('#libgrid'),m=$('#libmore');
+  m.innerHTML=s.page===1?`<div class="grid">${Array.from({length:8},()=>'<div class="skel" style="width:auto"></div>').join('')}</div>`:'<div class="msg">Carregando…</div>';
   try{
-    const r=await search('('+s.c.q+') AND '+langQ(),s.page,40);s.total=r.total;
-    const ok=await keepAllowed(r.docs);
+    const r=await search(s.q,s.page,40,lib.sort);
+    if(s!==libState)return;
+    s.total=r.total;
+    const ok=await keepAllowed(r.docs);s.shown+=ok.length;
     g.insertAdjacentHTML('beforeend',ok.map(d=>tileHTML(d)).join(''));enrich(g);
-    if(!g.children.length&&s.page*40>=s.total)g.outerHTML='<div class="msg">Nada com dublagem ou legenda em PT-BR aqui.</div>';
-    m.innerHTML=s.page*40<s.total?'<div class="msg"><button data-allmore>Carregar mais</button></div>':'';
-    s.page++;
-  }catch(e){m.innerHTML=errHTML('all')}
+    $('#libcount').textContent=r.total?`${r.total.toLocaleString('pt-BR')} títulos${lang?' (verificando idioma)':''}`:'';
+    const more=s.page*40<s.total;s.page++;
+    if(!s.shown&&!more){m.innerHTML=`<div class="msg">${emptyMsg()}</div>`;return}
+    m.innerHTML=more?'<div class="msg" id="libsentinel"><button data-libmore>Carregar mais</button></div>':'';
+    if(more&&'IntersectionObserver' in window){
+      if(libObs)libObs.disconnect();
+      libObs=new IntersectionObserver(es=>{if(es.some(x=>x.isIntersecting))moreLib()},{rootMargin:'600px'});
+      libObs.observe($('#libsentinel'));
+    }
+  }catch(e){if(s===libState)m.innerHTML=errHTML('lib',e)}
+  finally{s.busy=false}
 }
 
 /* ---------- BUSCA ---------- */
@@ -361,17 +466,17 @@ async function doSearch(page=1){
     const ids=words?await iaIdsByPtTitle(words):[];
     out.lastElementChild.remove();
     if(ids.length)q=`((${q}) OR identifier:(${ids.join(' OR ')}))`;
-    sState={q:q+' AND '+langQ(),page:1};
+    sState={q:withLang(q),page:1};
   }
   const m=$('#smore');m.innerHTML='<div class="msg">Buscando…</div>';
   try{
     const r=await search(sState.q,sState.page,40);
     const ok=await keepAllowed(r.docs);
-    if(sState.page===1&&!ok.length&&r.total<=40){out.innerHTML='<div class="msg">Nenhum resultado com dublagem ou legenda em PT-BR. Tente outra palavra ou outro idioma.</div>';return}
+    if(sState.page===1&&!ok.length&&r.total<=40){out.innerHTML=`<div class="msg">Nenhum resultado${lang?' neste idioma':''}. Tente outra palavra${lang?' ou "Todos os idiomas"':''}.</div>`;return}
     $('#sgrid').insertAdjacentHTML('beforeend',ok.map(d=>tileHTML(d)).join(''));enrich($('#sgrid'));
     m.innerHTML=sState.page*40<r.total?'<div class="msg"><button data-smore>Carregar mais</button></div>':'';
     sState.page++;
-  }catch(e){m.innerHTML=errHTML('search')}
+  }catch(e){m.innerHTML=errHTML('search',e)}
 }
 
 /* ---------- AO VIVO ---------- */
@@ -392,9 +497,13 @@ function renderLive(){
 }
 function playChannel(id){
   const c=allChans().find(x=>x.id===id);if(!c)return;
-  const src=c.ch?`https://www.youtube.com/embed/live_stream?channel=${encodeURIComponent(c.ch)}&autoplay=1&playsinline=1`:`https://www.youtube.com/embed/${encodeURIComponent(c.vid)}?autoplay=1&playsinline=1`;
+  // parâmetros e referrer que o YouTube passou a exigir para tocar dentro de apps (evita o "Erro 153")
+  const org=encodeURIComponent(location.origin);
+  const extra=`autoplay=1&playsinline=1&rel=0&origin=${org}&widget_referrer=${org}`;
+  const src=c.ch?`https://www.youtube.com/embed/live_stream?channel=${encodeURIComponent(c.ch)}&${extra}`:`https://www.youtube.com/embed/${encodeURIComponent(c.vid)}?${extra}`;
   openPlayer(c.name);
-  $('#stage').innerHTML=`<iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+  const a=$('#pyt');a.href=c.ch?`https://www.youtube.com/channel/${encodeURIComponent(c.ch)}/live`:`https://www.youtube.com/watch?v=${encodeURIComponent(c.vid)}`;a.hidden=false;$('#ptip').hidden=false;
+  $('#stage').innerHTML=`<iframe src="${src}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen; web-share" allowfullscreen referrerpolicy="strict-origin"></iframe>`;
 }
 
 /* ---------- MINHA LISTA ---------- */
@@ -425,7 +534,7 @@ async function openItem(id){
   sh.classList.add('on');
   box.innerHTML=`<div class="cover"><img src="${thumb(id)}" alt=""><button class="x" data-close>✕</button></div><div class="in"><div class="msg">Carregando…</div></div>`;
   try{
-    const j=await getJSON(IA+'/metadata/'+encodeURIComponent(id));
+    const j=await iaJSON('/metadata/'+encodeURIComponent(id));
     const md=j.metadata||{};const files=pickFiles(j.files||[]);
     const jv=judge(md,j.files||[]);ver[id]=jv;store.set('ver',ver);
     await fetchTitles([id]);
@@ -433,7 +542,6 @@ async function openItem(id){
     cur={id,title:st.main,orig:st.orig,year:first(md.year)||(first(md.date)||'').slice(0,4),files,subs:subsOf(j.files||[]),lang:jv.l};
     const lname=(LANGS.find(x=>x.id===jv.l)||{}).name||'';
     const audio=jv.l==='pt'?'Áudio em português':(lname?'Áudio: '+lname.split(' ·')[0]:'Áudio: idioma não informado')+(jv.sub?' · Legenda PT-BR':'');
-    if(!jv.ok){box.querySelector('.in').innerHTML=`<h3>${esc(cur.title)}</h3><div class="msg">Este título não tem dublagem nem legenda em PT-BR e foi bloqueado pelo filtro de idioma.</div>`;return}
     const isFav=favs.some(f=>f.id===id);
     const p=prog[id];
     const desc=txt(first(md.description)||'');
@@ -445,7 +553,7 @@ async function openItem(id){
     if(files.length>1)h+=`<ul class="eps">${files.map((f,i)=>`<li><button data-play="${esc(f.name)}"><span class="n">${i+1}</span><span>${esc(f.label)}</span><span class="p">${p&&p.file===f.name?'▶ '+fmtT(p.t):(f.len?fmtT(f.len):'')}</span></button></li>`).join('')}</ul>`;
     h+=`<div class="lic">Fonte: Internet Archive · ${lic&&/^https:\/\//.test(lic)?'Licença: '+esc(lic):'Acervo de domínio público/livre'} </div>`;
     box.querySelector('.in').innerHTML=h;
-  }catch(e){box.querySelector('.in').innerHTML=errHTML('item:'+id)}
+  }catch(e){box.querySelector('.in').innerHTML=errHTML('item:'+id,e)}
 }
 function closeSheet(){$('#sheet').classList.remove('on')}
 function toggleFav(){
@@ -459,7 +567,7 @@ function toggleFav(){
 /* ---------- PLAYER ---------- */
 let saveTimer=null;
 function openPlayer(title){
-  $('#ptitle').textContent=title;$('#player').classList.add('on');$('#pnext').hidden=true;
+  $('#ptitle').textContent=title;$('#player').classList.add('on');$('#pnext').hidden=true;$('#pyt').hidden=true;$('#ptip').hidden=true;
   try{screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(()=>{})}catch(e){}
 }
 function closePlayer(){
@@ -519,8 +627,9 @@ async function attachSub(v,name){
 /* ---------- navegação ---------- */
 function show(name){
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+name));
-  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===name||(name==='all'&&b.dataset.v==='home')));
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===name));
   if(name==='live')renderLive();
+  if(name==='lib')renderLib();
   if(name==='list')renderList();
   if(name==='search'&&!$('#sres').innerHTML){renderCats();doSearch()}
   window.scrollTo(0,0);
@@ -540,10 +649,15 @@ document.addEventListener('click',e=>{
   if(d.v){show(d.v);return}
   if(d.go){show(d.go);return}
   if(d.id){openItem(d.id);return}
-  if(d.all){openAll(d.all);return}
-  if(d.allmore!==undefined){moreAll();return}
+  if(d.all){openLib(d.all);return}
+  if(d.libmore!==undefined){moreLib();return}
+  if(d.libcat!==undefined){lib.cat=d.libcat;store.set('lib',lib);renderLib();return}
+  if(d.settings!==undefined){openSettings();return}
+  if(d.provupd!==undefined){runUpdate(true);return}
+  if(d.provtest!==undefined){runTest();return}
+  if(d.provreset!==undefined){resetProv();return}
   if(d.smore!==undefined){doSearch(2);return}
-  if(d.lang!==undefined){lang=d.lang;store.set('lang',lang);if($('#v-search').classList.contains('on')){renderCats();doSearch()}else renderHome();return}
+  if(d.lang!==undefined){lang=d.lang;store.set('lang2',lang);if($('#v-search').classList.contains('on')){renderCats();doSearch()}else if($('#v-lib').classList.contains('on'))renderLib();else renderHome();return}
   if(d.cat!==undefined){sCat=d.cat;renderCats();doSearch();return}
   if(d.close!==undefined){closeSheet();return}
   if(d.fav!==undefined){toggleFav();return}
@@ -551,7 +665,7 @@ document.addEventListener('click',e=>{
   if(d.play){playFile(d.play);return}
   if(d.ch){playChannel(d.ch);return}
   if(d.clearseen!==undefined){for(const k in prog)if(prog[k].done)delete prog[k];store.set('prog',prog);renderList();return}
-  if(d.retry){const [k,v]=d.retry.split(/:(.*)/);if(k==='row')loadRow(CATS.find(c=>c.id===v));else if(k==='all')moreAll();else if(k==='search')doSearch(sState&&sState.page>1?2:1);else if(k==='item'){closeSheet();openItem(v)}return}
+  if(d.retry){const [k,v]=d.retry.split(/:(.*)/);if(k==='row')loadRow(CATS.find(c=>c.id===v),1);else if(k==='lib')moreLib();else if(k==='search')doSearch(sState&&sState.page>1?2:1);else if(k==='item'){closeSheet();openItem(v)}return}
 });
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
 $('#pback').addEventListener('click',closePlayer);
@@ -564,7 +678,80 @@ document.addEventListener('submit',e=>{
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden){const v=$('#stage video');if(v)saveProg(v)}});
 
+/* ---------- AJUSTES: provedores e atualização automática ---------- */
+const AUTO_EVERY=6*3600*1000; // confere a lista de provedores a cada 6 horas
+const fmtWhen=t=>t?new Date(t).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'}):'nunca';
+let provHealth={}; // base -> 'ok' | 'falhou' | 'testando'
+function settingsHTML(){
+  return `<div class="cover" style="aspect-ratio:auto;height:56px;background:none"><button class="x" data-close>✕</button></div><div class="set">
+  <h3>Provedores</h3>
+  <p class="stat">Lista v${esc(PROV.version||'?')}${PROV.updated?' · '+esc(PROV.updated):''} · ${CATS.length} categorias</p>
+  <ul class="prov">${PROV.archive.map(b=>`<li class="${b===IA?'on':''}"><b>${esc(b.replace(/^https:\/\//,''))}</b><span>${b===IA?'em uso':''}${provHealth[b]?' · '+provHealth[b]:''}</span></li>`).join('')}</ul>
+  <label class="sw"><span>Atualizar os links dos provedores automaticamente<br><small style="color:var(--dim)">Ao abrir o app e a cada 6 horas. Se um provedor cair, o app passa para o próximo da lista.</small></span><input type="checkbox" id="pauto" ${pset.auto?'checked':''}></label>
+  <label for="purl" class="stat" style="display:block">Endereço da lista de provedores (providers.json)</label>
+  <input type="url" id="purl" placeholder="https://raw.githubusercontent.com/SEU-USUARIO/SEU-REPO/main/providers.json" value="${esc(pset.url)}" inputmode="url" autocomplete="off">
+  <p class="stat">Última verificação: ${fmtWhen(pset.last)}${pset.status?' · '+esc(pset.status):''}</p>
+  <div class="acts"><button class="btn" data-provupd>Atualizar agora</button><button class="btn ghost" data-provtest>Testar provedores</button><button class="btn ghost" data-provreset>Restaurar padrão</button></div>
+  </div>`;
+}
+function openSettings(){$('#sheet').classList.add('on');$('#sbox').innerHTML=settingsHTML();bindSettings()}
+function refreshSettings(){if($('#sheet').classList.contains('on')&&$('#pauto')){$('#sbox').innerHTML=settingsHTML();bindSettings()}}
+function bindSettings(){
+  $('#pauto').onchange=e=>{pset.auto=e.target.checked;store.set('pset',pset);toast(pset.auto?'Atualização automática ligada':'Atualização automática desligada')};
+  $('#purl').onchange=e=>{const u=e.target.value.trim();if(u&&!isHttps(u)){toast('Use um endereço https://');e.target.value=pset.url;return}pset.url=u;store.set('pset',pset);toast('Endereço salvo')};
+}
+// testa os provedores na ordem da lista e passa a usar o primeiro que responder
+async function pickBest(){
+  for(const b of PROV.archive){
+    provHealth[b]='testando';refreshSettings();
+    try{await fetchJSON(b+'/advancedsearch.php?q=mediatype%3Amovies&rows=1&output=json',12000);provHealth[b]='ok';
+      if(b!==IA){IA=b;store.set('iabase',b);cache.clear()}
+      refreshSettings();return b}
+    catch(e){provHealth[b]='falhou'}
+  }
+  refreshSettings();return null;
+}
+async function updateProviders(){
+  const old=JSON.stringify(PROV);let msgs=[];
+  if(pset.url){
+    try{
+      const u=pset.url+(pset.url.includes('?')?'&':'?')+'t='+Date.now();
+      const j=await fetchJSON(u,15000);
+      if(!validProv(j))throw new Error('arquivo com formato inválido');
+      store.set('prov',j);applyProv(j);
+      msgs.push(JSON.stringify(PROV)!==old?'lista atualizada para v'+(PROV.version||'?'):'lista já estava em dia');
+    }catch(e){msgs.push('não baixou a lista ('+e.message+')')}
+  }else msgs.push('sem endereço de lista, usando a embutida');
+  const best=await pickBest();
+  msgs.push(best?'provedor ativo: '+best.replace(/^https:\/\//,''):'nenhum provedor respondeu');
+  pset.last=Date.now();pset.status=msgs.join(' · ');store.set('pset',pset);
+  return {changed:JSON.stringify(PROV)!==old,ok:!!best};
+}
+let updating=false;
+async function runUpdate(manual){
+  if(updating)return;updating=true;
+  const prevIA=IA;
+  if(manual)toast('Atualizando provedores…');
+  try{
+    const r=await updateProviders();
+    if(manual)toast(r.ok?'Provedores atualizados':'Nenhum provedor respondeu');
+    if(r.changed||IA!==prevIA)rerender();
+  }finally{updating=false;refreshSettings()}
+}
+async function runTest(){toast('Testando provedores…');const b=await pickBest();toast(b?'Usando '+b.replace(/^https:\/\//,''):'Nenhum provedor respondeu');pset.last=Date.now();pset.status=b?'provedor ativo: '+b.replace(/^https:\/\//,''):'nenhum provedor respondeu';store.set('pset',pset);refreshSettings()}
+function resetProv(){
+  store.set('prov',null);store.set('iabase','');applyProv(DEF_PROV);
+  pset={auto:true,url:DEF_CFG_URL,last:0,status:'padrão restaurado'};store.set('pset',pset);provHealth={};
+  refreshSettings();rerender();toast('Provedores padrão restaurados');
+}
+function rerender(){
+  const on=[...document.querySelectorAll('.view')].find(s=>s.classList.contains('on'));const n=on?on.id.slice(2):'home';
+  if(n==='home')renderHome();else if(n==='lib')renderLib();else if(n==='live')renderLive();else if(n==='list')renderList();else if(n==='search'&&$('#sres').innerHTML){renderCats();doSearch()}
+}
+
 renderHome();
+if(pset.auto&&Date.now()-(pset.last||0)>AUTO_EVERY)runUpdate(false);
+setInterval(()=>{if(pset.auto&&!document.hidden&&Date.now()-(pset.last||0)>AUTO_EVERY)runUpdate(false)},15*60*1000);
 }
 </script>
 </body>

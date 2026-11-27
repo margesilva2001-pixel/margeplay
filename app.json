@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "NeGoPLAy",
+    "slug": "negoplay",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#09070D",
+    "icon": "./assets/logo.png",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#09070D"
+    },
+    "android": {
+      "package": "com.negoplay.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#09070D"
+      }
+    },
+    "plugins": [
+      "expo-video"
+    ]
+  }
+}

@@ -1,9 +1,24 @@
 {
-  "version": 1,
+  "version": 3,
   "updated": "2026-11-27",
-  "_leia": "Edite este arquivo no GitHub para trocar ou adicionar links sem gerar outro APK. Aumente o numero de version a cada mudanca. archive: enderecos tentados em ordem (o primeiro que responder e usado). Use so fontes legais.",
+  "_leia": "Edite este arquivo no GitHub para trocar ou adicionar links sem gerar outro APK. Aumente o numero de version a cada mudanca. archive: enderecos de acervos compativeis com pesquisa de arquivos. iptv: plataformas de canais ao vivo. vod: plataformas de filmes e series sob demanda. Use somente fontes legais.",
   "archive": [
     "https://archive.org"
+  ],
+  "iptv": [
+    "https://pluto.tv/br/",
+    "https://watch.plex.tv/",
+    "https://www.samsungtvplus.com/"
+  ],
+  "vod": [
+    "https://telabrasil.cultura.gov.br/",
+    "https://www.itauculturalplay.com.br/",
+    "https://libreflix.org/",
+    "https://portacurtas.org.br/",
+    "https://sesc.digital/",
+    "https://play.mercadolivre.com.br/",
+    "https://pluto.tv/br/",
+    "https://watch.plex.tv/"
   ],
   "wikidata": "https://query.wikidata.org/sparql",
   "categories": [

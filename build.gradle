@@ -1,3 +1,32 @@
 plugins {
-    id 'com.android.application' version '8.7.3' apply false
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.margeplay.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.margeplay.app"
+        minSdk 24
+        targetSdk 35
+        versionCode 3
+        versionName "2.1"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            // Para publicar, configure sua própria assinatura (Build > Generate Signed APK no Android Studio).
+            signingConfig signingConfigs.debug
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
 }

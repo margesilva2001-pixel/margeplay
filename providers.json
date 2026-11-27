@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "updated": "2026-11-27",
+  "_leia": "Edite este arquivo no GitHub para trocar ou adicionar links sem gerar outro APK. Aumente o numero de version a cada mudanca. archive: enderecos tentados em ordem (o primeiro que responder e usado). Use so fontes legais.",
+  "archive": [
+    "https://archive.org"
+  ],
+  "wikidata": "https://query.wikidata.org/sparql",
+  "categories": [
+    {
+      "id": "filmes",
+      "name": "Filmes clássicos",
+      "q": "collection:feature_films"
+    },
+    {
+      "id": "desenhos",
+      "name": "Desenhos e animações",
+      "q": "collection:(classic_cartoons OR animationandcartoons)"
+    },
+    {
+      "id": "anime",
+      "name": "Anime clássico",
+      "q": "collection:(animationandcartoons OR classic_cartoons) AND (subject:anime OR subject:japanese OR title:anime)"
+    },
+    {
+      "id": "series",
+      "name": "Séries de TV clássicas",
+      "q": "collection:classic_tv"
+    },
+    {
+      "id": "terror",
+      "name": "Terror e ficção científica",
+      "q": "collection:SciFi_Horror"
+    },
+    {
+      "id": "noir",
+      "name": "Policial noir",
+      "q": "collection:film_noir"
+    },
+    {
+      "id": "mudo",
+      "name": "Cinema mudo",
+      "q": "collection:silent_films"
+    },
+    {
+      "id": "abertos",
+      "name": "Filmes abertos (Blender)",
+      "q": "(creator:\"Blender Foundation\" OR subject:\"blender open movie\" OR subject:\"open movie\")"
+    }
+  ],
+  "channels": [
+    {
+      "id": "cultura",
+      "name": "TV Cultura",
+      "sub": "Canal oficial · PT-BR",
+      "ch": "UCjOJvvYe6tyEHY21OD33h8A"
+    },
+    {
+      "id": "lofi",
+      "name": "Lofi Girl",
+      "sub": "Música 24 h · sem diálogo",
+      "ch": "UCSJ4gkVC6NrvII8umztf0Ow"
+    }
+  ]
+}

@@ -4,12 +4,21 @@ App de filmes, desenhos, anime clássico, séries antigas e canais ao vivo, usan
 
 ## O que o app faz
 - **Catálogo:** filmes clássicos, desenhos e animações, anime clássico, séries de TV, terror e ficção, policial noir, cinema mudo e filmes abertos. Vem do Internet Archive (domínio público e licenças abertas).
-- **Filtro de idioma:** só aparece título com áudio em português (selo DUB PT) ou com legenda em PT-BR (selo LEG PT). Tudo o mais é escondido. Dá para separar por idioma do áudio: Português, Inglês, Espanhol, Japonês, Francês, Italiano, Alemão e Outros.
+- **Biblioteca de filmes:** aba própria com o acervo completo, filtro por categoria e década, ordenação (mais assistidos, adicionados recentemente, A–Z, ano) e rolagem infinita.
+- **Filtro de idioma opcional:** por padrão mostra todos os idiomas. Se quiser, escolha "Só com PT" (áudio em português, selo DUB PT, ou legenda PT-BR, selo LEG PT) ou um idioma específico com legenda PT-BR.
 - **Títulos oficiais em português:** quando o filme está cadastrado no Wikidata, aparece o título usado no Brasil, com o título original menor embaixo. Sem tradução, o app mostra o título original limpo, sem "(1922)", "Restored" ou "HD". A busca também encontra pelo nome em português.
 - **Player no próprio app:** tela cheia, lista de episódios, botão "Próximo" e legenda PT-BR ligada automaticamente.
 - **Busca** por título, ator, diretor ou tema, com filtro por categoria e idioma.
 - **Minha lista:** favoritos, continuar assistindo (salva o ponto onde você parou) e já assistidos.
 - **Ao vivo:** canais oficiais do YouTube. Vem com TV Cultura e Lofi Girl, e você pode adicionar outros colando o link.
+
+## Provedores e atualização automática
+Os endereços que o app usa (Internet Archive, Wikidata, categorias e canais ao vivo) ficam no arquivo **`providers.json`**, na raiz do projeto.
+- Quando o APK é gerado pelo GitHub Actions, o app já vem apontado para o `providers.json` do seu repositório. Para trocar um link, edite esse arquivo no GitHub e aumente o número de `version`. O app baixa a versão nova sozinho, sem precisar gerar outro APK.
+- O app confere a lista ao abrir e a cada 6 horas. Em `archive`, os endereços são testados em ordem: se o primeiro cair, ele passa para o próximo.
+- Tudo isso fica em **Ajustes** (engrenagem no topo): ligar ou desligar a atualização automática, trocar o endereço da lista, "Atualizar agora", "Testar provedores" e "Restaurar padrão".
+- O repositório precisa ser **público** para o app conseguir ler o `providers.json`. Se for privado, hospede o arquivo em outro lugar público e cole o endereço em Ajustes.
+- Gerando pelo Android Studio, o endereço vem vazio: cole o link "raw" do seu `providers.json` em Ajustes, ou preencha `app/src/main/assets/www/config.js`.
 
 ## Como gerar o APK
 
@@ -32,5 +41,5 @@ App de filmes, desenhos, anime clássico, séries antigas e canais ao vivo, usan
 
 ## Observações
 - O Internet Archive não diferencia português do Brasil de português de Portugal. Títulos marcados como "Portuguese" entram como DUB PT.
-- O acervo dublado ou legendado em PT-BR em domínio público é pequeno. Algumas categorias podem aparecer vazias em certos idiomas.
+- O acervo dublado ou legendado em PT-BR em domínio público é pequeno. Com o filtro "Só com PT" ligado, algumas categorias podem aparecer vazias; volte para "Todos os idiomas" para ver tudo.
 - Para publicar na Play Store, você precisa de uma assinatura própria e de autorização para usar a foto do ícone.
